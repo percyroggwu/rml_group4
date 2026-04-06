@@ -1,6 +1,6 @@
-# RML - Assignment 1 - Group 4 - Summary
+# RML - Assignment - Group 4 - Summary
 
-This repository contains the solution for Group Homework 1 in the Responsible Machine Learning course.
+This repository contains the solution assignment 1, 2 and 3 for the Responsible Machine Learning Class.
 
 ## Task
 The assignment analyzes the alignment problem between:
