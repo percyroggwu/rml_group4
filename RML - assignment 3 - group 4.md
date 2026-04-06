@@ -2,15 +2,21 @@
 
 **Question 1**
 
-Calibration within groups means that the same score should have the same meaning across groups. Formally:
+Calibration within groups means that the same score should have the same meaning across groups. 
+
+Formally:
 P(Y=1 | S=s, A=0) = P(Y=1 | S=s, A=1), for every score level s.
 
 if two people from different groups receive the same score, that score should represent the same probability of the outcome. For example, a score of 0.70 should imply about the same observed likelihood of Y=1 for both groups
-FPR parity means equal false positive rates across groups. Formally:
+FPR parity means equal false positive rates across groups. 
+
+Formally:
 P(h=1 | Y=0, A=0) = P(h=1 | Y=0, A=1).
 
 This means that among individuals who truly belong to the negative class, both groups are incorrectly labeled as positive at the same rate. From a business perspective, this matters because it avoids one group being over-flagged, over-penalized, or more frequently denied by mistake
-FNR parity means equal false negative rates across groups. Formally:
+FNR parity means equal false negative rates across groups. 
+
+Formally:
 P(h=0 | Y=1, A=0) = P(h=0 | Y=1, A=1).
 
 This means that among individuals who truly belong to the positive class, both groups are missed at the same rate. In practical terms, this matters when a model fails to identify deserving candidates, eligible customers, or truly risky cases unevenly across groups
