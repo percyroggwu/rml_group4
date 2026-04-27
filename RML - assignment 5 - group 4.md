@@ -43,12 +43,15 @@ This type of attack is commonly defined in the adversarial machine learning lite
 (a)  The formal (ε, δ)-DP guarantee.
 
 Differential privacy is a mathematical promise about how much a single person's data can influence a model's outputs. Formally, a mechanism M satisfies (ε, δ)-differential privacy if, for any two datasets D and D' that differ by just one person's record, and for any possible output S:
+
 Pr[M(D) ∈ S] ≤ e^ε · Pr[M(D') ∈ S] + δ
+
 To put it simply, adding or removing one person from the training data can only change the model's outputs by a small, controlled amount. The smaller ε is, the stronger the privacy protection. δ is a tiny safety valve, a small probability that the guarantee is allowed to fail. In practice, this is enforced during training by adding random noise to the learning process, so no single person's data has too much influence [From Lecture 5, slide 24].
  
 (b) Why DP hurts minority groups more.
 
 Bagdasaryan & Shmatikov (2019) showed that adding privacy noise doesn't hurt everyone equally. It hurts smaller, underrepresented groups much more. More technically, DP-SGD, the training algorithm, clips each person's contribution to the learning process and then adds random noise. Minority-group examples tend to produce stronger individual signals because the model hasn't seen as many of them. However, clipping cuts off that strength. Then the added noise overwhelms what's left. The result is that the model converges toward accuracy for the majority group and drifts away from the minority group.
+
 We already know from Lecture 03 that the model has a higher false positive rate for Black defendants than white defendants. Applying differential privacy would make this gap wider, not smaller because Black defendants are the underrepresented group whose learning signal gets washed out first.
 
 (c) Can COMPAS satisfy DP, FPR parity, and MI resistance all at once?
@@ -60,4 +63,8 @@ Simultaneous satisfaction would require several things. One, a large enough ε t
 
 **Question 3. Governance Recommendation:**
 
-Based on the COMPAS deployment pipeline, the greatest risk comes from data poisoning attacks by high-privileged insiders (e.g., data clerks) or third-party vendors, because these attacks compromise the training data or model itself, leading to systematic and hard-to-detect errors in risk predictions. Unlike evasion attacks, which affect individual cases, poisoning and backdoor attacks can impact the entire population and persist over time. To mitigate this risk, we recommend implementing strict data governance and model auditing mechanisms, including access control for data entry, logging and monitoring of all data modifications, and independent third-party audits of both training data and model behavior. Additionally, techniques such as data validation, anomaly detection, and backdoor testing should be applied before deployment. However, these protections introduce important tradeoffs. Stronger auditing and monitoring may increase operational costs and reduce system efficiency, while strict access control may slow down data processing workflows. Furthermore, implementing robust defenses (e.g., differential privacy or anomaly detection) may slightly reduce model accuracy or complicate model interpretability. Therefore, the system should adopt a balanced approach, prioritizing integrity and reliability while carefully managing tradeoffs between security, fairness, and performance.
+Based on the COMPAS deployment pipeline, the greatest risk comes from data poisoning attacks by high-privileged insiders (e.g., data clerks) or third-party vendors, because these attacks compromise the training data or model itself, leading to systematic and hard-to-detect errors in risk predictions. Unlike evasion attacks, which affect individual cases, poisoning and backdoor attacks can impact the entire population and persist over time. To mitigate this risk, we recommend implementing strict data governance and model auditing mechanisms, including access control for data entry, logging and monitoring of all data modifications, and independent third-party audits of both training data and model behavior. 
+
+Additionally, techniques such as data validation, anomaly detection, and backdoor testing should be applied before deployment. However, these protections introduce important tradeoffs. Stronger auditing and monitoring may increase operational costs and reduce system efficiency, while strict access control may slow down data processing workflows. Furthermore, implementing robust defenses (e.g., differential privacy or anomaly detection) may slightly reduce model accuracy or complicate model interpretability. 
+
+Therefore, the system should adopt a balanced approach, prioritizing integrity and reliability while carefully managing tradeoffs between security, fairness, and performance.
