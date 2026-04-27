@@ -1,40 +1,63 @@
-Group Assignment 5
-Question 1. Threat Modeling
-COMPAS deployment pipeline： Data collection → Data entry → Data storage → Model training → Model deployment → Decision use
-From the data collection stage, defendants can perform attacks by manipulating input features.
+**Group Assignment 5**
+
+**Question 1. Threat Modeling**
+
+COMPAS deployment pipeline： 
+
+Data collection → Data entry → Data storage → Model training → Model deployment → Decision use
+
+**From the data collection stage, defendants can perform attacks by manipulating input features.**
+
 (a) The defendant’s goal is to reduce their predicted risk score and avoid being classified as high risk by the system. By strategically altering the input data, the model may produce a more favorable prediction. This type of manipulation can lead to an integrity breach, as the input data no longer accurately reflects the true underlying characteristics of the individual, thereby undermining the reliability of the model’s output.
+
 (b)The attacker likely operates under a black-box setting, meaning they do not have access to the model’s internal parameters, training data, or decision rules. However, they may still observe outputs (e.g., risk scores or classifications) and use this feedback to iteratively adjust their inputs to achieve a more desirable outcome.
+
 (c)They may manipulate input features such as personal background, socioeconomic status, or behavioral indicators that are known or believed to influence the model’s prediction. For example, they might misreport income, omit unfavorable history, or adjust observable behaviors prior to evaluation in order to appear lower risk to the system.
+
 (d)This constitutes an evasion attack, as it occurs after the model has been deployed and focuses on manipulating input data at prediction time. The attacker’s objective is not to alter the model itself, but to evade unfavorable predictions by presenting modified inputs that lead to a lower risk classification.
 This type of attack is commonly defined in the adversarial machine learning literature as an evasion attack (Biggio et al., 2018).
 
-From the data entry stage, data clerks can perform attacks by manipulating input features.
+**From the data entry stage, data clerks can perform attacks by manipulating input features.**
+
 (a) The data clerk’s goal is to corrupt the COMPAS training dataset by introducing incorrect or misleading data. By strategically adding mislabeled or manipulated records (e.g., incorrect criminal history or risk-related attributes), this may negatively impact the model’s performance. Such tampering corrupts the training data’s integrity, which can lead to flawed or biased COMPAS risk scores.
+
 (b)The data clerk operates under a white-box (or high-privileged insider) setting, since they have direct access to the training data during the data entry and preprocessing stages in the COMPAS pipeline. This allows them to modify labels and data points (e.g., recidivism outcomes or defendant features) before the data is fed into the model, which goes beyond the capabilities of a black-box or typical gray-box attacker.
+
 (c) They may manipulate labels by intentionally mislabeling important data points used in the COMPAS training process. For example, they might incorrectly label whether a defendant reoffended, or alter features such as prior offenses or risk indicators, thereby misleading the model during its training phase.
+
 (d) This constitutes a data poisoning attack, as it involves tampering with the COMPAS training data to manipulate the model’s learning. The attacker’s objective is to subtly degrade the quality of the dataset, leading to incorrect or biased risk predictions that may unfairly influence judicial decisions.
 This type of attack is commonly defined in the adversarial machine learning literature as a data poisoning attack(Biggio et al., 2018).
-From the Model training and Model deployment stage stage, third-party vendors can perform attacks by supplying a compromised risk assessment model.
-(a) The third-party vendor’s goal is to compromise the COMPAS risk prediction system by embedding malicious behaviors during the model training or development process. By providing a manipulated model, they can cause incorrect or biased risk scores, potentially affecting judicial decisions such as bail or sentencing.
-(b) The attacker operates under a white-box setting, as the vendor has full access to the model architecture, training data, and parameter tuning process. This level of access allows them to intentionally introduce hidden vulnerabilities or malicious logic into the model before deployment.
-(c) They may insert a backdoor into the COMPAS model by embedding specific triggers that activate manipulated predictions. For example, the model may behave normally for most defendants, but produce systematically lower or higher risk scores when certain input patterns (e.g., specific demographic or behavioral features) are present.
-(d) This constitutes a backdoor (or supply chain) attack, as the compromise occurs during the model development and supply stage. The attacker’s objective is to deploy a model that appears legitimate but produces biased or manipulated outcomes under certain conditions, thereby undermining fairness and reliability in judicial decision-making.
-Question 2 — Privacy–Fairness Tradeoff
 
-A-  The formal (ε, δ)-DP guarantee.
+**From the Model training and Model deployment stage stage, third-party vendors can perform attacks by supplying a compromised risk assessment model.**
+
+(a) The third-party vendor’s goal is to compromise the COMPAS risk prediction system by embedding malicious behaviors during the model training or development process. By providing a manipulated model, they can cause incorrect or biased risk scores, potentially affecting judicial decisions such as bail or sentencing.
+
+(b) The attacker operates under a white-box setting, as the vendor has full access to the model architecture, training data, and parameter tuning process. This level of access allows them to intentionally introduce hidden vulnerabilities or malicious logic into the model before deployment.
+
+(c) They may insert a backdoor into the COMPAS model by embedding specific triggers that activate manipulated predictions. For example, the model may behave normally for most defendants, but produce systematically lower or higher risk scores when certain input patterns (e.g., specific demographic or behavioral features) are present.
+
+(d) This constitutes a backdoor (or supply chain) attack, as the compromise occurs during the model development and supply stage. The attacker’s objective is to deploy a model that appears legitimate but produces biased or manipulated outcomes under certain conditions, thereby undermining fairness and reliability in judicial decision-making.
+
+**Question 2 — Privacy–Fairness Tradeoff**
+
+(a)  The formal (ε, δ)-DP guarantee.
+
 Differential privacy is a mathematical promise about how much a single person's data can influence a model's outputs. Formally, a mechanism M satisfies (ε, δ)-differential privacy if, for any two datasets D and D' that differ by just one person's record, and for any possible output S:
 Pr[M(D) ∈ S] ≤ e^ε · Pr[M(D') ∈ S] + δ
 To put it simply, adding or removing one person from the training data can only change the model's outputs by a small, controlled amount. The smaller ε is, the stronger the privacy protection. δ is a tiny safety valve, a small probability that the guarantee is allowed to fail. In practice, this is enforced during training by adding random noise to the learning process, so no single person's data has too much influence [From Lecture 5, slide 24].
  
+(b) Why DP hurts minority groups more.
 
-B- Why DP hurts minority groups more.
 Bagdasaryan & Shmatikov (2019) showed that adding privacy noise doesn't hurt everyone equally. It hurts smaller, underrepresented groups much more. More technically, DP-SGD, the training algorithm, clips each person's contribution to the learning process and then adds random noise. Minority-group examples tend to produce stronger individual signals because the model hasn't seen as many of them. However, clipping cuts off that strength. Then the added noise overwhelms what's left. The result is that the model converges toward accuracy for the majority group and drifts away from the minority group.
 We already know from Lecture 03 that the model has a higher false positive rate for Black defendants than white defendants. Applying differential privacy would make this gap wider, not smaller because Black defendants are the underrepresented group whose learning signal gets washed out first.
+
 (c) Can COMPAS satisfy DP, FPR parity, and MI resistance all at once?
+
 To answer shortly, satisfying all three at once is theoretically possible only under very specific conditions, and in practice with COMPAS it is extremely difficult. However, DP and MI resistance actually work well together, stronger privacy protection (smaller ε) directly makes membership inference harder, because the model's outputs become less sensitive to any individual record. So those two goals pull in the same direction.
 The problem is FPR parity. To get strong privacy protection, you add a lot of noise during training. That noise drowns out the signal from minorities, which makes the model more biased, not less. So tightening privacy widens the FPR gap.
 You could try to fix the FPR gap afterward by adjusting the score threshold separately for Black and white defendants. But that means explicitly using race to set different cutoffs which runs into legal problems under anti-discrimination law.
 Simultaneous satisfaction would require several things. One, a large enough ε that minority accuracy is, Second is that a training dataset that is racially balanced so both groups contribute equally to learning, and Finally, a fairness correction that doesn't explicitly use race. In practice, COMPAS training data reflects decades of racially imbalanced arrest patterns, and no single ε value satisfies all three constraints at once. 
 
-Question 3. Governance Recommendation:
+**Question 3. Governance Recommendation:**
+
 Based on the COMPAS deployment pipeline, the greatest risk comes from data poisoning attacks by high-privileged insiders (e.g., data clerks) or third-party vendors, because these attacks compromise the training data or model itself, leading to systematic and hard-to-detect errors in risk predictions. Unlike evasion attacks, which affect individual cases, poisoning and backdoor attacks can impact the entire population and persist over time. To mitigate this risk, we recommend implementing strict data governance and model auditing mechanisms, including access control for data entry, logging and monitoring of all data modifications, and independent third-party audits of both training data and model behavior. Additionally, techniques such as data validation, anomaly detection, and backdoor testing should be applied before deployment. However, these protections introduce important tradeoffs. Stronger auditing and monitoring may increase operational costs and reduce system efficiency, while strict access control may slow down data processing workflows. Furthermore, implementing robust defenses (e.g., differential privacy or anomaly detection) may slightly reduce model accuracy or complicate model interpretability. Therefore, the system should adopt a balanced approach, prioritizing integrity and reliability while carefully managing tradeoffs between security, fairness, and performance.
