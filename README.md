@@ -15,6 +15,8 @@ The assignments focus on core fairness and governance questions in machine learn
 - RML - assignment 1 - group 4.md
 - RML - assignment 2 - group 4.md
 - RML - assignment 3 - group 4.md
+- RML - assignment 4 - group 4.docx
+- RML - assignment 5 - group 4.md
 
 ## Assignment Summaries
 
@@ -46,6 +48,10 @@ Main ideas:
 - FPR parity and FNR parity require equal error rates across groups.
 - When base rates differ, a non-trivial classifier cannot generally satisfy calibration, equal FPR, and equal FNR at the same time.
 - The assignment connects this result to the COMPAS case and discusses when calibration may be preferred over FPR parity from a governance perspective.
+
+### Assignment 4 - Calibration and fairness trade-offs
+
+### Assignment 5 - Calibration and fairness trade-offs
 
 ## Summary
 
