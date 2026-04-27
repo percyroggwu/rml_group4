@@ -49,9 +49,9 @@ Main ideas:
 - When base rates differ, a non-trivial classifier cannot generally satisfy calibration, equal FPR, and equal FNR at the same time.
 - The assignment connects this result to the COMPAS case and discusses when calibration may be preferred over FPR parity from a governance perspective.
 
-### Assignment 4 - Calibration and fairness trade-offs
+### Assignment 4 - Audit Framework
 
-### Assignment 5 - Calibration and fairness trade-offs
+### Assignment 5 - Security
 
 ## Summary
 
