@@ -1,14 +1,16 @@
 # Responsible Machine Learning - Group 4
 
-This repository contains Group 4 solutions for Assignments 1, 2, and 3 in the Responsible Machine Learning course.
+This repository contains Group 4 solutions for Assignments 1-5 in the Responsible Machine Learning course.
 
 ## Repository Overview
 
-The assignments focus on core fairness and governance questions in machine learning, including:
+The assignments focus on core fairness, security, and governance questions in machine learning, including:
 
 - The mismatch between optimization targets and real human objectives
 - The limits of feature-level explainability for fairness assessment
-- Gairness trade-offs between calibration and equal error rates
+- Fairness trade-offs between calibration and equal error rates
+- Audit frameworks for drift, generalization failure, subgroup disparity, and robustness stress
+- Security and privacy risks, including evasion, poisoning, backdoor attacks, differential privacy, and membership inference
 
 ## Contents
 
@@ -51,7 +53,25 @@ Main ideas:
 
 ### Assignment 4 - Audit Framework
 
+This assignment develops a sociotechnical audit framework for evaluating predictive models after deployment, using the COMPAS pipeline as an illustrative case.
+
+Main ideas:
+- Strong aggregate performance is not sufficient for defensible deployment.
+- Predictive systems must be evaluated for drift, generalization failure, subgroup disparity, and robustness stress.
+- Audit metrics should connect technical evidence to governance actions such as monitoring, recalibration, retraining, redesign, or escalation.
+- The COMPAS case shows how approximate calibration can coexist with unequal subgroup error rates, especially higher false positive rates for Black defendants and higher false negative rates for White defendants.
+- The assignment proposes less discriminatory alternatives, including feature/model redesign and decision-system redesign with human review and continuous monitoring.
+
 ### Assignment 5 - Security
+
+This assignment examines security and privacy risks in responsible machine learning systems, using the COMPAS deployment pipeline as the main example.
+
+Main ideas:
+- The COMPAS pipeline can be attacked at multiple stages, including data collection, data entry, model training, deployment, and decision use.
+- Evasion attacks can occur when individuals manipulate inputs at prediction time.
+- Data poisoning and backdoor attacks are higher-risk because they can corrupt the training data or model behavior at scale.
+- Differential privacy can reduce membership inference risk, but it may also worsen minority-group performance when privacy noise weakens underrepresented-group signals.
+- Governance should prioritize access control, logging, validation, anomaly detection, independent audits, and backdoor testing.
 
 ## Summary
 
